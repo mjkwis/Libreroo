@@ -9,7 +9,8 @@ This design starts Libreroo as an interview-focused, backend-first implementatio
 - `.ai/docs/techstack.md`
 - `.ai/agents/architect.md`
 
-Phase 1 objective is a working backend quickly, while preserving clean architecture boundaries and a credible evolution path.
+Phase 1 objective is a working backend quickly, while preserving clean architecture boundaries and a credible evolution
+path.
 
 ## Scope
 
@@ -19,14 +20,14 @@ Phase 1 objective is a working backend quickly, while preserving clean architect
 - Use one ASP.NET Core Web API project with modular internal boundaries.
 - Use PostgreSQL in Docker from day one.
 - Implement foundational cross-cutting plumbing:
-  - global exception handling
-  - input validation baseline
-  - Swagger/OpenAPI
-  - health endpoint
+    - global exception handling
+    - input validation baseline
+    - Swagger/OpenAPI
+    - health endpoint
 - Establish core domain model and endpoint surface for:
-  - Catalog (Books, Authors)
-  - Members
-  - Loans (borrow, return, active loans)
+    - Catalog (Books, Authors)
+    - Members
+    - Loans (borrow, return, active loans)
 
 ### Out of scope (phase 1)
 
@@ -86,9 +87,9 @@ Cross-module interaction uses explicit interfaces/use cases only.
 - Authors: full CRUD
 - Members: full CRUD
 - Loans:
-  - `POST /loans` borrow
-  - `POST /loans/{id}/return` return
-  - `GET /loans/active` active loans
+    - `POST /loans` borrow
+    - `POST /loans/{id}/return` return
+    - `GET /loans/active` active loans
 
 Controllers stay thin and delegate to application use cases/services.
 DTOs are distinct from EF entities.
@@ -121,12 +122,12 @@ Testing depth remains focused on highest-risk behavior first (loan invariants an
 ## ADR Updates
 
 1. Confirm existing ADR alignment:
-   - `.ai/docs/adr/0001-modular-monolith-with-separate-frontend.md`
+    - `.ai/docs/adr/0001-modular-monolith-with-separate-frontend.md`
 2. Add new ADR:
-   - `0002-no-authentication-in-phase-1.md`
-   - Decision: defer authentication/authorization in phase 1.
-   - Rationale: optimize for fast working MVP and domain logic demonstration.
-   - Consequence: phase 2 must introduce auth with backward-compatible API evolution where possible.
+    - `0002-no-authentication-in-phase-1.md`
+    - Decision: defer authentication/authorization in phase 1.
+    - Rationale: optimize for fast working MVP and domain logic demonstration.
+    - Consequence: phase 2 must introduce auth with backward-compatible API evolution where possible.
 
 ## Milestone Acceptance Criteria
 
@@ -141,8 +142,8 @@ Testing depth remains focused on highest-risk behavior first (loan invariants an
 ## Risks and Mitigations
 
 - Risk: module boundaries degrade in a single project.
-  - Mitigation: strict folder/layer conventions, code review checks, and explicit interfaces.
+    - Mitigation: strict folder/layer conventions, code review checks, and explicit interfaces.
 - Risk: auth deferral leaks into later phases.
-  - Mitigation: ADR records explicit phase boundary and required phase 2 follow-up.
+    - Mitigation: ADR records explicit phase boundary and required phase 2 follow-up.
 - Risk: time spent on architecture instead of runnable output.
-  - Mitigation: start with minimal vertical slice and enforce scope control.
+    - Mitigation: start with minimal vertical slice and enforce scope control.

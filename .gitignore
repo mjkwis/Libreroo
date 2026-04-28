@@ -57,7 +57,7 @@ TestResult.xml
 nunit-*.xml
 
 # AI
-.ai
+#.ai
 
 #Rider IDE 
 .idea
