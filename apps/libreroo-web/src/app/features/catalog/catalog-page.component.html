@@ -1,0 +1,51 @@
+<section class="page">
+  <header>
+    <h2>Catalog</h2>
+    <p>
+      Active member:
+      <strong>{{ selectedMemberLabel() }}</strong>
+      <a routerLink="/member">Manage member</a>
+    </p>
+  </header>
+
+  @if (successMessage()) {
+    <p class="success">{{ successMessage() }}</p>
+  }
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  @if (isLoading()) {
+    <p>Loading books...</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author Id</th>
+          <th>Available</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (book of books(); track book.id) {
+          <tr>
+            <td>{{ book.title }}</td>
+            <td>{{ book.authorId }}</td>
+            <td>{{ book.availableCopies }}</td>
+            <td>
+              <button
+                type="button"
+                (click)="borrow(book)"
+                [disabled]="!canBorrow(book) || borrowInFlightForBookId() === book.id"
+              >
+                Borrow
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

@@ -1,0 +1,40 @@
+<section class="page">
+  <header>
+    <h2>Member</h2>
+    <p>Select an existing member or register a new one.</p>
+  </header>
+
+  @if (successMessage()) {
+    <p class="success">{{ successMessage() }}</p>
+  }
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  <form (submit)="onSubmit($event)" class="quick-registration">
+    <label for="fullName">Quick registration</label>
+    <div class="controls">
+      <input id="fullName" type="text" [formControl]="fullName" placeholder="Full name" />
+      <button type="submit" [disabled]="isCreateInFlight()">Register</button>
+    </div>
+    @if (fullName.touched && fullName.invalid) {
+      <small class="error">Full name is required.</small>
+    }
+  </form>
+
+  @if (isLoading()) {
+    <p>Loading members...</p>
+  } @else {
+    <ul>
+      @for (member of members(); track member.id) {
+        <li>
+          <span>{{ member.fullName }} (#{{ member.id }})</span>
+          <button type="button" (click)="selectMember(member)" [disabled]="isSelected(member)">
+            {{ isSelected(member) ? 'Selected' : 'Use member' }}
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</section>

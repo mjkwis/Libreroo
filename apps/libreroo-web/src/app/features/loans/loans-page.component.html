@@ -1,0 +1,49 @@
+<section class="page">
+  <header>
+    <h2>Active loans</h2>
+    <p>List of currently borrowed books.</p>
+  </header>
+
+  @if (successMessage()) {
+    <p class="success">{{ successMessage() }}</p>
+  }
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  @if (isLoading()) {
+    <p>Loading active loans...</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Loan Id</th>
+          <th>Book Id</th>
+          <th>Member Id</th>
+          <th>Borrow date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (loan of loans(); track loan.id) {
+          <tr>
+            <td>{{ loan.id }}</td>
+            <td>{{ loan.bookId }}</td>
+            <td>{{ loan.memberId }}</td>
+            <td>{{ loan.borrowDate | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+            <td>
+              <button
+                type="button"
+                (click)="returnLoan(loan.id)"
+                [disabled]="returningLoanId() === loan.id"
+              >
+                Return
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

@@ -1,0 +1,22 @@
+{
+  "/books": {
+    "target": "http://localhost:5141",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/authors": {
+    "target": "http://localhost:5141",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/members": {
+    "target": "http://localhost:5141",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/loans": {
+    "target": "http://localhost:5141",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

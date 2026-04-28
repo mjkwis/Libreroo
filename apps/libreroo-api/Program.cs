@@ -32,6 +32,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+if (!app.Environment.IsEnvironment("Testing"))
+{
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<LibrerooDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
+
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.MapControllers();
 
