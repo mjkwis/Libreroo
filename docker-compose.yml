@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:17.9
+    container_name: libreroo-postgres
+    environment:
+      POSTGRES_USER: libreroo
+      POSTGRES_PASSWORD: libreroo
+      POSTGRES_DB: libreroo
+    ports:
+      - "5433:5432"
+    volumes:
+      - libreroo-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  libreroo-postgres-data:
