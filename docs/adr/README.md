@@ -39,3 +39,4 @@ Short list of options and why they were not chosen.
 
 - [0001 - Modular Monolith With Separate Frontend](./0001-modular-monolith-with-separate-frontend.md)
 - [0002 - No Authentication in Phase 1](./0002-no-authentication-in-phase-1.md)
+- [0003 - Phase 2 Auth with Keycloak and PostgreSQL Authorization](./0003-phase-2-auth-with-keycloak-and-postgresql-authorization.md)

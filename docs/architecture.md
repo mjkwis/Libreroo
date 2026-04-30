@@ -9,7 +9,9 @@ Primary goal: show solid backend architecture and clean fullstack integration wi
 
 - Backend: modular monolith in one ASP.NET Core API application
 - Frontend: Angular application in the same repository, separate package and deploy unit
-- Deployment model: two deployable units (`libreroo-api`, `libreroo-web`) plus PostgreSQL
+- Authentication: Keycloak as external identity provider (OIDC/OAuth2)
+- Authorization: hybrid model using JWT claims + Libreroo access data in PostgreSQL
+- Deployment model: `libreroo-api`, `libreroo-web`, `keycloak`, and `postgresql`
 
 ## Repository Structure
 
@@ -18,12 +20,13 @@ Libreroo/
   apps/
     libreroo-api/
     libreroo-web/
-  .ai/
-    docs/
-      architecture.md
-      adr/
-        README.md
-        0001-modular-monolith-with-separate-frontend.md
+  docs/
+    architecture.md
+    adr/
+      README.md
+      0001-modular-monolith-with-separate-frontend.md
+      0002-no-authentication-in-phase-1.md
+      0003-phase-2-auth-with-keycloak-and-postgresql-authorization.md
 ```
 
 ## Backend Structure (Modular Monolith)
@@ -33,6 +36,7 @@ Modules:
 - `Catalog` (Books, Authors)
 - `Members`
 - `Loans`
+- `Access` (user-role/permission mapping and domain identity link)
 
 Each module should contain:
 
@@ -63,12 +67,20 @@ Shared cross-cutting code:
     - OpenAPI-first contract generation (preferred), or
     - manually versioned DTO contracts with strict review.
 - Do not couple frontend directly to database concerns.
+- Frontend authenticates via Keycloak (Authorization Code + PKCE).
+- API validates bearer tokens and applies policy checks based on token claims and local access records.
 
 ## Data and Transaction Boundaries
 
 - Single PostgreSQL database for the monolith.
 - One EF Core `DbContext` can be used initially, with clear module entity configuration boundaries.
 - Business invariants (for example loan/return rules) live in domain/application logic, not in controllers.
+- Keycloak remains the source of authentication truth (identity proof and token issuance).
+- Libreroo PostgreSQL stores authorization and domain linkage data (for example: local user profile, member linkage,
+  app roles, optional granular permissions).
+- API authorization decisions combine:
+    1. token validity and identity from Keycloak
+    2. role/permission state from Libreroo database
 
 ## Non-Goals (Current Scope)
 
@@ -76,6 +88,7 @@ Shared cross-cutting code:
 - No distributed messaging/event bus
 - No advanced CQRS/event sourcing
 - No premature multi-database segregation
+- No custom identity provider implementation inside Libreroo
 
 ## Evolution Triggers
 
@@ -86,4 +99,4 @@ Revisit architecture only when one of these appears:
 - scaling or reliability needs force independent deployments
 - bounded context complexity outgrows current in-process boundaries
 
-Related decisions are tracked in ADRs under `.ai/docs/adr/`.
+Related decisions are tracked in ADRs under `docs/adr/`.
