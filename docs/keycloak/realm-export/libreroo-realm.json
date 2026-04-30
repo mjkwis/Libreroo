@@ -1,0 +1,47 @@
+{
+  "realm": "libreroo",
+  "enabled": true,
+  "displayName": "Libreroo",
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "roles": {
+    "realm": [
+      {
+        "name": "member",
+        "description": "Libreroo member role"
+      },
+      {
+        "name": "librarian",
+        "description": "Libreroo librarian role"
+      },
+      {
+        "name": "admin",
+        "description": "Libreroo admin role"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "libreroo-web",
+      "name": "Libreroo Web",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "redirectUris": [
+        "http://localhost:4200/*"
+      ],
+      "webOrigins": [
+        "http://localhost:4200"
+      ],
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false
+    },
+    {
+      "clientId": "libreroo-api",
+      "name": "Libreroo API",
+      "enabled": true,
+      "bearerOnly": true,
+      "protocol": "openid-connect"
+    }
+  ]
+}

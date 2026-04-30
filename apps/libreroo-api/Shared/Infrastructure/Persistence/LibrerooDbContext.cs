@@ -1,3 +1,4 @@
+using Libreroo.Api.Modules.Access.Domain;
 using Libreroo.Api.Modules.Catalog.Domain;
 using Libreroo.Api.Modules.Loans.Domain;
 using Libreroo.Api.Modules.Members.Domain;
@@ -18,6 +19,10 @@ public class LibrerooDbContext : DbContext
     public DbSet<Member> Members => Set<Member>();
 
     public DbSet<Loan> Loans => Set<Loan>();
+
+    public DbSet<AccessUser> AccessUsers => Set<AccessUser>();
+
+    public DbSet<AccessRoleAssignment> AccessRoleAssignments => Set<AccessRoleAssignment>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

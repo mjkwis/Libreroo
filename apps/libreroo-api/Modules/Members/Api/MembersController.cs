@@ -1,10 +1,13 @@
 using Libreroo.Api.Modules.Members.Application;
+using Libreroo.Api.Shared.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Libreroo.Api.Modules.Members.Api;
 
 [ApiController]
 [Route("members")]
+[Authorize(Policy = AccessPolicies.LibrarianOrAdmin)]
 public sealed class MembersController : ControllerBase
 {
     private readonly MemberService _memberService;

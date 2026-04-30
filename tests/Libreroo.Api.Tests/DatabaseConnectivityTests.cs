@@ -1,14 +1,13 @@
 using Libreroo.Api.Shared.Infrastructure.Persistence;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Libreroo.Api.Tests;
 
-public class DatabaseConnectivityTests : IClassFixture<WebApplicationFactory<Program>>
+public class DatabaseConnectivityTests : IClassFixture<CustomWebApplicationFactory>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory _factory;
 
-    public DatabaseConnectivityTests(WebApplicationFactory<Program> factory)
+    public DatabaseConnectivityTests(CustomWebApplicationFactory factory)
     {
         _factory = factory;
     }

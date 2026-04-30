@@ -64,4 +64,15 @@ public sealed class LoanService
             .AsNoTracking()
             .Where(loan => loan.ReturnDate == null)
             .ToListAsync(cancellationToken);
+
+    public Task<List<Loan>> GetActiveForMemberAsync(int memberId, CancellationToken cancellationToken = default) =>
+        _dbContext.Loans
+            .AsNoTracking()
+            .Where(loan => loan.ReturnDate == null && loan.MemberId == memberId)
+            .ToListAsync(cancellationToken);
+
+    public Task<bool> IsLoanOwnedByMemberAsync(int loanId, int memberId, CancellationToken cancellationToken = default) =>
+        _dbContext.Loans.AnyAsync(
+            loan => loan.Id == loanId && loan.MemberId == memberId,
+            cancellationToken);
 }
