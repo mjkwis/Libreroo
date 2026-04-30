@@ -1,28 +1,50 @@
 using System.Net;
 using Libreroo.Api.Modules.Access.Domain;
 using Libreroo.Api.Shared.Infrastructure.Persistence;
-using Libreroo.Api.Tests.Auth;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Libreroo.Api.Tests;
+namespace Libreroo.Api.Tests.Auth;
 
-public class LoansEndpointTests : IClassFixture<CustomWebApplicationFactory>
+public class AuthPolicyTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly CustomWebApplicationFactory _factory;
 
-    public LoansEndpointTests(CustomWebApplicationFactory factory)
+    public AuthPolicyTests(CustomWebApplicationFactory factory)
     {
         _factory = factory;
     }
 
     [Fact]
-    public async Task GetActiveLoans_ReturnsOk()
+    public async Task GetMembers_WhenUnauthenticated_ReturnsUnauthorized()
+    {
+        var client = _factory.CreateClient();
+
+        var response = await client.GetAsync("/members");
+
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetMembers_WithMemberRoleInAccessDb_ReturnsForbidden()
+    {
+        var subject = $"member-{Guid.NewGuid():N}";
+        await SeedAccessUserAsync(subject, AccessRole.Member);
+        var client = CreateAuthenticatedClient(subject);
+
+        var response = await client.GetAsync("/members");
+
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetMembers_WithLibrarianRoleInAccessDb_ReturnsOk()
     {
         var subject = $"librarian-{Guid.NewGuid():N}";
         await SeedAccessUserAsync(subject, AccessRole.Librarian);
         var client = CreateAuthenticatedClient(subject);
 
-        var response = await client.GetAsync("/loans/active");
+        var response = await client.GetAsync("/members");
+
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
